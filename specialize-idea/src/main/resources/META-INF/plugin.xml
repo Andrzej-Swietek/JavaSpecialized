@@ -1,0 +1,17 @@
+<idea-plugin>
+    <id>dev.specialize.idea</id>
+    <name>Specialize</name>
+    <vendor>specialize</vendor>
+    <description><![CDATA[
+        IDE support for the <code>dev.specialize</code> annotation processor. Shows the bridge methods the processor
+        injects into <code>@Specialize</code> templates (<code>static OptInt some(int)</code>) in completion and
+        resolution, exactly like the Lombok plugin shows generated getters, and stops reporting
+        <code>Opt&lt;int&gt;</code> as an error when <code>Opt</code> is a template.
+    ]]></description>
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.java</depends>
+    <extensions defaultExtensionNs="com.intellij">
+        <lang.psiAugmentProvider implementation="dev.specialize.idea.BridgeAugmentProvider"/>
+        <daemon.highlightInfoFilter implementation="dev.specialize.idea.PrimitiveArgumentErrorFilter"/>
+    </extensions>
+</idea-plugin>
