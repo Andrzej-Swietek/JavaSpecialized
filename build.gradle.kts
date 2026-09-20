@@ -20,6 +20,7 @@ subprojects {
     // and :specialize-examples into ~/.m2, where any Gradle or Maven project (see samples/) can pick them up.
     run {
         apply(plugin = "maven-publish")
+        val registry = providers.environmentVariable("MAVEN_REPO_URL")
         extensions.configure<PublishingExtension> {
             publications {
                 create<MavenPublication>("maven") {
@@ -27,6 +28,20 @@ subprojects {
                     pom {
                         name = project.name
                         description = provider { project.description }
+                    }
+                }
+            }
+            // `MAVEN_REPO_URL=https://… ./gradlew publishAllPublicationsToRemoteRepository` publishes to any
+            // Maven repository; without the variable the build has no remote repository at all.
+            if (registry.isPresent) {
+                repositories {
+                    maven {
+                        name = "Remote"
+                        url = uri(registry.get())
+                        credentials {
+                            username = providers.environmentVariable("MAVEN_REPO_USER").orNull
+                            password = providers.environmentVariable("MAVEN_REPO_TOKEN").orNull
+                        }
                     }
                 }
             }

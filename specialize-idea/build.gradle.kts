@@ -38,11 +38,14 @@ tasks.withType<JavaCompile>().configureEach {
     options.release = 21
 }
 
+// `-PpluginVersion=1.2.3` (CI passes the tag); the zip keeps its plain name so install paths stay stable.
+val pluginVersion: String = providers.gradleProperty("pluginVersion").getOrElse("0.1.0")
+
 intellijPlatform {
     pluginConfiguration {
         id = "dev.specialize.idea"
         name = "Specialize"
-        version = "0.1.0"
+        version = pluginVersion
         ideaVersion {
             sinceBuild = "251"
             untilBuild = provider { null }
@@ -59,13 +62,16 @@ tasks.register("updatePluginsXml") {
     dependsOn(tasks.named("buildPlugin"))
     val output = layout.buildDirectory.file("distributions/updatePlugins.xml")
     val url = pluginRepositoryUrl
+    val version = provider { pluginVersion }
+    inputs.property("url", url)
+    inputs.property("version", version)
     outputs.file(output)
     doLast {
         output.get().asFile.writeText(
             """
             <?xml version="1.0" encoding="UTF-8"?>
             <plugins>
-              <plugin id="dev.specialize.idea" url="${url.get()}/specialize-idea.zip" version="0.1.0">
+              <plugin id="dev.specialize.idea" url="${url.get()}/specialize-idea.zip" version="${version.get()}">
                 <idea-version since-build="251"/>
                 <name>Specialize</name>
                 <description>IDE support for the dev.specialize annotation processor</description>

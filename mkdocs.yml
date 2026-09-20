@@ -1,0 +1,20 @@
+site_name: specialize
+site_description: A javac annotation processor that specializes generic classes for primitives
+docs_dir: documentation
+nav:
+  - Overview: index.md
+  - Getting started: getting-started.md
+  - Templates: templates.md
+  - Call sites: call-sites.md
+  - Explicit specializations: explicit-specializations.md
+  - Methods: methods.md
+  - Prim: prim.md
+  - '@Inline': inline.md
+  - '@TailRec': tailrec.md
+  - '@Unroll': unroll.md
+  - '@ConstEval': consteval.md
+  - Jackson: jackson.md
+  - IDE support: ide.md
+  - Internals: internals.md
+  - Limitations: limitations.md
+  - Benchmarks: benchmarks.md
