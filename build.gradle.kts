@@ -3,7 +3,8 @@ subprojects {
     apply(plugin = "jacoco")
 
     group = "dev.specialize"
-    version = "0.1.0"
+    // `-PreleaseVersion=1.2.3` (CI passes the tag), so the published jars always carry the version they were built from.
+    version = providers.gradleProperty("releaseVersion").getOrElse("0.1.0")
 
     repositories {
         mavenCentral()
